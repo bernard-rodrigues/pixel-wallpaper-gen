@@ -19,12 +19,17 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     const rows = Math.ceil(rect.h / pixelSize);
     const baseHSL = hexToHSL(area.baseColor);
 
-    // (seededRandom removed as it is not used in the loops yet)
+    // Deterministic seed for the area
+    let seedValue = area.seed;
+    const rng = () => {
+      const x = Math.sin(seedValue++) * 10000;
+      return x - Math.floor(x);
+    };
 
     if (area.mode === 'RANDOM') {
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          const color = getRandomizedHSL(baseHSL, area.hueRange, area.satRange, area.lightRange);
+          const color = getRandomizedHSL(baseHSL, area.hueRange, area.satRange, area.lightRange, rng);
           ctx.fillStyle = hslToCSS(color);
           ctx.fillRect(rect.x + c * pixelSize, rect.y + r * pixelSize, pixelSize, pixelSize);
         }
@@ -32,7 +37,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     } else {
       const gradientColors: HSL[] = [];
       for (let i = 0; i < area.gradientColors; i++) {
-        gradientColors.push(getRandomizedHSL(baseHSL, area.hueRange, area.satRange, area.lightRange));
+        gradientColors.push(getRandomizedHSL(baseHSL, area.hueRange, area.satRange, area.lightRange, rng));
       }
 
       for (let r = 0; r < rows; r++) {
@@ -80,13 +85,19 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     const endY = Math.ceil((sunY + sunRadius) / pixelSize);
     
     const baseHSL = hexToHSL(sun.baseColor);
-    // (seededRandom removed as it is not used in the loops yet)
+    
+    // Deterministic seed for the area
+    let sunSeed = sun.seed;
+    const sunRng = () => {
+      const x = Math.sin(sunSeed++) * 10000;
+      return x - Math.floor(x);
+    };
 
     // Pre-generate gradient colors if needed
     const gradientColors: HSL[] = [];
     if (sun.mode === 'GRADIENT') {
       for (let i = 0; i < sun.gradientColors; i++) {
-        gradientColors.push(getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange));
+        gradientColors.push(getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, sunRng));
       }
     }
 
@@ -106,7 +117,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
           
           let color: HSL;
           if (sun.mode === 'RANDOM') {
-            color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange);
+            color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, sunRng);
           } else {
             let t = 0;
             const relX = (px - (sunX - sunRadius)) / (sunRadius * 2);
@@ -133,7 +144,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
 
   const drawReflection = (
     ctx: CanvasRenderingContext2D,
-    sun: AreaConfig & { x: number; y: number; radius: number },
+    sun: AreaConfig & { x: number; y: number; radius: number; seed: number },
     canvasW: number,
     canvasH: number,
     splitY: number
@@ -145,6 +156,13 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     
     const baseHSL = hexToHSL(sun.baseColor);
     
+    // Deterministic seed for reflection (reusing sun seed to match pattern)
+    let refSeed = sun.seed;
+    const refRng = () => {
+      const x = Math.sin(refSeed++) * 10000;
+      return x - Math.floor(x);
+    };
+
     // Bounding box for reflection (mirrored across splitY)
     const reflectionCenterY = splitY + (splitY - sunY);
     const startX = Math.floor((sunX - sunRadius) / pixelSize);
@@ -155,7 +173,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     const gradientColors: HSL[] = [];
     if (sun.mode === 'GRADIENT') {
       for (let i = 0; i < sun.gradientColors; i++) {
-        gradientColors.push(getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange));
+        gradientColors.push(getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, refRng));
       }
     }
 
@@ -183,7 +201,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
         if (dx * dx + dy * dy <= sunRadius * sunRadius) {
           let color: HSL;
           if (sun.mode === 'RANDOM') {
-            color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange);
+            color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, refRng);
           } else {
             let t = 0;
             const relX = (px - (sunX - sunRadius)) / (sunRadius * 2);

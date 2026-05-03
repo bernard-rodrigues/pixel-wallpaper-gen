@@ -7,7 +7,7 @@ function App() {
   const { config, updateGlobal, updateSide, regenerateSide } = useWallpaper();
 
   return (
-    <div className="app-container">
+    <div className={`app-container theme-${config.themeMode.toLowerCase()}`}>
       <Controls 
         config={config} 
         updateGlobal={updateGlobal} 

@@ -1,10 +1,26 @@
 :root {
-  --bg-color: #1a1a1a;
-  --panel-bg: #2d2d2d;
-  --text-color: #e0e0e0;
-  --accent-color: #3498db;
-  --accent-hover: #2980b9;
-  --input-bg: #3d3d3d;
+  /* Default Dark Theme - High Contrast */
+  --bg-color: #080808;
+  --panel-bg: #121212;
+  --card-bg: #1e1e1e;
+  --text-color: #ffffff;
+  --accent-color: #448aff;
+  --accent-hover: #2979ff;
+  --input-bg: #2a2a2a;
+  --border-color: #333;
+  --label-color: #aaa;
+}
+
+.theme-light {
+  --bg-color: #f5f5f5;
+  --panel-bg: #ffffff;
+  --card-bg: #f0f0f0;
+  --text-color: #121212;
+  --accent-color: #2962ff;
+  --accent-hover: #0039cb;
+  --input-bg: #e0e0e0;
+  --border-color: #ccc;
+  --label-color: #666;
 }
 
 * {
@@ -14,15 +30,17 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, sans-serif;
   background-color: var(--bg-color);
   color: var(--text-color);
   overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 #root {
-  height: 100vh; /* Fallback */
-  height: 100dvh;
+  height: 100%;
   display: flex;
 }
 
@@ -34,163 +52,236 @@ body {
 
 /* Controls Panel */
 .controls-panel {
-  width: 320px;
+  width: 340px;
   background-color: var(--panel-bg);
-  padding: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
   overflow-y: auto;
-  border-right: 1px solid #444;
+  border-right: 1px solid var(--border-color);
   z-index: 10;
+  transition: background-color 0.3s, border-color 0.3s;
 }
 
 .controls-panel h1 {
-  font-size: 1.4rem;
-  margin-bottom: 5px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  margin-bottom: 8px;
   color: var(--accent-color);
-}
-
-.control-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 5px;
-}
-
-.control-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  opacity: 0.9;
-}
-
-select, input[type="text"], input[type="number"] {
-  background-color: var(--input-bg);
-  border: 1px solid #555;
-  color: white;
-  padding: 8px;
-  border-radius: 4px;
-}
-
-/* Slider Controls */
-.slider-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.slider-controls input[type="range"] {
-  flex: 1;
-}
-
-.step-buttons {
-  display: flex;
-  gap: 4px;
-}
-
-.step-buttons button {
-  background-color: var(--input-bg);
-  border: 1px solid #555;
-  color: white;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  font-weight: bold;
-  user-select: none;
-  touch-action: manipulation;
-}
-
-.step-buttons button:active {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
-}
-.react-colorful {
-  width: 100% !important;
-  height: 140px !important;
-}
-
-.toggle-group {
-  display: flex;
-  gap: 2px;
-  background-color: var(--input-bg);
-  padding: 2px;
-  border-radius: 4px;
-}
-
-.toggle-group button {
-  flex: 1;
-  background: none;
-  border: none;
-  color: white;
-  padding: 8px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 0.8rem;
-}
-
-.toggle-group button.active {
-  background-color: var(--accent-color);
-}
-
-.regenerate-button {
-  margin-top: 5px;
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 4px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.2s;
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
 }
 
 /* Tabs */
 .tabs {
   display: flex;
-  background-color: var(--input-bg);
+  background-color: var(--bg-color);
   padding: 4px;
-  border-radius: 6px;
-  margin-bottom: 5px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  border: 1px solid var(--border-color);
 }
 
 .tabs button {
   flex: 1;
   background: none;
   border: none;
-  color: white;
-  padding: 10px;
+  color: var(--label-color);
+  padding: 10px 4px;
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all 0.2s;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tabs button.active {
   background-color: var(--accent-color);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 .tab-content {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  animation: fadeIn 0.2s ease-out;
+  gap: 12px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(5px); }
+/* Grouped Controls */
+.control-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  background-color: var(--card-bg);
+  padding: 16px;
+  border-radius: 16px;
+  align-items: start;
+  border: 1px solid var(--border-color);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.control-group label {
+  grid-column: span 2;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--label-color);
+  margin-bottom: 4px;
+}
+
+.control-group select, 
+.control-group .toggle-group,
+.control-group .regenerate-button {
+  grid-column: span 2;
+}
+
+/* Progressive Disclosure: Slider Button */
+.expandable-control {
+  display: contents;
+}
+
+.expandable-control.full-width .slider-popover {
+  grid-column: span 2;
+}
+
+.expand-button {
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 12px;
+  border-radius: 10px;
+  text-align: left;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 58px;
+}
+
+.expand-button:hover {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.expand-button.active {
+  border-color: var(--accent-color);
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.prop-name {
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.prop-value {
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.expand-button.active .prop-value,
+.expand-button:hover .prop-value {
+  color: white;
+}
+
+.theme-dark .expand-button:not(.active):not(:hover) .prop-value {
+  color: var(--accent-color);
+}
+
+.theme-light .expand-button:not(.active):not(:hover) .prop-value {
+  color: var(--accent-color);
+}
+
+.slider-popover {
+  margin-top: 8px;
+  padding: 16px;
+  background-color: var(--bg-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.split-setup {
-  padding-top: 10px;
-  border-top: 1px solid #444;
+/* Inputs & Buttons */
+select {
+  width: 100%;
+  background-color: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.toggle-group {
+  display: flex;
+  gap: 4px;
+  background-color: var(--bg-color);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+.toggle-group button {
+  flex: 1;
+  background: none;
+  border: none;
+  color: var(--label-color);
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.toggle-group button.active {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.regenerate-button {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.1s;
+}
+
+.regenerate-button:active {
+  transform: scale(0.98);
+}
+
+.step-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.step-buttons button {
+  flex: 1;
+  height: 44px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
 
 /* Preview Area */
@@ -199,67 +290,73 @@ select, input[type="text"], input[type="number"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-image: 
-    radial-gradient(#333 1px, transparent 1px);
-  background-size: 20px 20px;
+  padding: 32px;
+  background-color: var(--bg-color);
   overflow: hidden;
+  transition: background-color 0.3s;
 }
 
 .canvas-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
   max-width: 100%;
   max-height: 100%;
-  overflow-y: auto; /* Crucial for tablet landscape visibility */
-  padding: 20px;
 }
 
 .wallpaper-canvas {
   max-width: 100%;
-  max-height: 70vh; /* Reduced to ensure button is visible */
-  max-height: 70dvh;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-  background-color: black;
+  max-height: 80vh;
+  max-height: 80dvh;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  border-radius: 4px;
   object-fit: contain;
-  flex-shrink: 0;
 }
 
 .export-button {
-  background-color: #27ae60;
+  background-color: #00c853;
   color: white;
   border: none;
-  padding: 12px 30px;
-  border-radius: 4px;
-  font-weight: bold;
+  padding: 14px 40px;
+  border-radius: 14px;
+  font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  flex-shrink: 0;
+  box-shadow: 0 8px 24px rgba(0,200,83,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* Mobile Responsiveness Refinement */
+/* Color Picker Styling */
+.react-colorful {
+  width: 100% !important;
+  height: 160px !important;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  #root {
-    flex-direction: column;
-  }
   .app-container {
     flex-direction: column;
-    overflow: hidden;
   }
+  
   .controls-panel {
     width: 100%;
-    height: 40%;
+    height: 45%;
     order: 2;
     border-right: none;
-    border-top: 1px solid #444;
-    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    padding: 12px;
   }
+  
   .preview-area {
     width: 100%;
-    height: 60%;
+    height: 55%;
     order: 1;
-    padding: 10px;
+    padding: 16px;
+  }
+
+  .wallpaper-canvas {
+    max-height: 40vh;
+    max-height: 40dvh;
   }
 }

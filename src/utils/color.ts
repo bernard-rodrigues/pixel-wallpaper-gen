@@ -37,10 +37,16 @@ export const hslToCSS = (hsl: HSL): string => {
   return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
 };
 
-export const getRandomizedHSL = (base: HSL, rangeH: number, rangeS: number, rangeL: number): HSL => {
-  const h = (base.h + (Math.random() * 2 - 1) * rangeH + 360) % 360;
-  const s = Math.min(100, Math.max(0, base.s + (Math.random() * 2 - 1) * rangeS));
-  const l = Math.min(100, Math.max(0, base.l + (Math.random() * 2 - 1) * rangeL));
+export const getRandomizedHSL = (
+  base: HSL, 
+  rangeH: number, 
+  rangeS: number, 
+  rangeL: number,
+  rng: () => number = Math.random
+): HSL => {
+  const h = (base.h + (rng() * 2 - 1) * rangeH + 360) % 360;
+  const s = Math.min(100, Math.max(0, base.s + (rng() * 2 - 1) * rangeS));
+  const l = Math.min(100, Math.max(0, base.l + (rng() * 2 - 1) * rangeL));
   return { h, s, l };
 };
 

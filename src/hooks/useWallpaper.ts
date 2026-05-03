@@ -5,6 +5,7 @@ export type Orientation = 'PORTRAIT' | 'LANDSCAPE';
 export type Mode = 'RANDOM' | 'GRADIENT';
 export type GradientDirection = 'HORIZONTAL' | 'VERTICAL' | 'DIAGONAL';
 export type SplitAxis = 'HORIZONTAL' | 'VERTICAL';
+export type ThemeMode = 'LIGHT' | 'DARK';
 
 export interface AreaConfig {
   mode: Mode;
@@ -31,6 +32,7 @@ export interface WallpaperConfig {
   orientation: Orientation;
   splitAxis: SplitAxis;
   splitPos: number;
+  themeMode: ThemeMode;
   sideA: AreaConfig;
   sideB: AreaConfig;
   sun: SunConfig;
@@ -101,15 +103,16 @@ export const useWallpaper = () => {
       orientation: 'PORTRAIT',
       splitAxis: 'HORIZONTAL',
       splitPos: splitPos,
+      themeMode: 'DARK',
       sideA: initialArea(theme.sky),
       sideB: initialArea(theme.land),
       sun: {
         ...initialArea(theme.sun),
         enabled: true,
         reflection: true,
-        x: 20 + Math.random() * 60,
-        y: sunY,
-        radius: 10 + Math.random() * 10,
+        x: Math.floor(20 + Math.random() * 60),
+        y: Math.floor(sunY),
+        radius: Math.floor(10 + Math.random() * 10),
       },
     };
   });
