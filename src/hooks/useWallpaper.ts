@@ -20,6 +20,7 @@ export interface AreaConfig {
 
 export interface SunConfig extends AreaConfig {
   enabled: boolean;
+  reflection: boolean;
   x: number;
   y: number;
   radius: number;
@@ -105,6 +106,7 @@ export const useWallpaper = () => {
       sun: {
         ...initialArea(theme.sun),
         enabled: true,
+        reflection: true,
         x: 20 + Math.random() * 60,
         y: sunY,
         radius: 10 + Math.random() * 10,

@@ -28,6 +28,14 @@ const Controls: React.FC<ControlsProps> = ({ config, updateGlobal, updateSide, r
                 onChange={(e) => updateSide('sun', { enabled: e.target.checked })} 
               />
             </label>
+            <label className="toggle-label">
+              Reflection
+              <input 
+                type="checkbox" 
+                checked={config.sun.reflection} 
+                onChange={(e) => updateSide('sun', { reflection: e.target.checked })} 
+              />
+            </label>
           </div>
         )}
 

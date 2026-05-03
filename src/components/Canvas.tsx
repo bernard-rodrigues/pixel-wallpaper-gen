@@ -131,6 +131,85 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     }
   };
 
+  const drawReflection = (
+    ctx: CanvasRenderingContext2D,
+    sun: AreaConfig & { x: number; y: number; radius: number },
+    canvasW: number,
+    canvasH: number,
+    splitY: number
+  ) => {
+    const pixelSize = Math.max(4, sun.density);
+    const sunX = (sun.x / 100) * canvasW;
+    const sunY = (sun.y / 100) * canvasH;
+    const sunRadius = (sun.radius / 100) * Math.min(canvasW, canvasH);
+    
+    const baseHSL = hexToHSL(sun.baseColor);
+    let seed = sun.seed;
+
+    // Bounding box for reflection (mirrored across splitY)
+    const reflectionCenterY = splitY + (splitY - sunY);
+    const startX = Math.floor((sunX - sunRadius) / pixelSize);
+    const endX = Math.ceil((sunX + sunRadius) / pixelSize);
+    const startY = Math.floor((reflectionCenterY - sunRadius) / pixelSize);
+    const endY = Math.ceil((reflectionCenterY + sunRadius) / pixelSize);
+
+    const gradientColors: HSL[] = [];
+    if (sun.mode === 'GRADIENT') {
+      for (let i = 0; i < sun.gradientColors; i++) {
+        gradientColors.push(getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange));
+      }
+    }
+
+    for (let r = startY; r <= endY; r++) {
+      const py = r * pixelSize;
+      
+      // Only draw below the split line and within Side B
+      if (py < splitY || py >= canvasH) continue;
+
+      // "Linha sim, linha não" pattern (striped)
+      if (Math.floor((py - splitY) / pixelSize) % 2 === 1) continue;
+
+      // Fading opacity based on distance from splitY
+      const distance = py - splitY;
+      const opacity = Math.max(0, 0.8 - (distance / (sunRadius * 2)));
+      if (opacity <= 0) continue;
+
+      for (let c = startX; c <= endX; c++) {
+        const px = c * pixelSize;
+        
+        // Circular check (using mirrored Y)
+        const dx = px + pixelSize / 2 - sunX;
+        const dy = (splitY - (py + pixelSize / 2 - splitY)) - sunY;
+        
+        if (dx * dx + dy * dy <= sunRadius * sunRadius) {
+          let color: HSL;
+          if (sun.mode === 'RANDOM') {
+            color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange);
+          } else {
+            let t = 0;
+            const relX = (px - (sunX - sunRadius)) / (sunRadius * 2);
+            const relY = (dy + sunRadius) / (sunRadius * 2);
+            if (sun.gradientDirection === 'HORIZONTAL') t = relX;
+            else if (sun.gradientDirection === 'VERTICAL') t = relY;
+            else t = (relX + relY) / 2;
+            
+            t = Math.max(0, Math.min(1, t));
+            const scaledT = t * (gradientColors.length - 1);
+            const index = Math.floor(scaledT);
+            const nextIndex = Math.min(index + 1, gradientColors.length - 1);
+            const localT = scaledT - index;
+            color = interpolateHSL(gradientColors[index], gradientColors[nextIndex], localT);
+          }
+          
+          ctx.globalAlpha = opacity;
+          ctx.fillStyle = hslToCSS(color);
+          ctx.fillRect(px, py, pixelSize, pixelSize);
+          ctx.globalAlpha = 1.0;
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -158,6 +237,10 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
       // Draw Sun on top of Side A, clipped by splitY
       if (config.sun.enabled) {
         drawSun(ctx, config.sun, width, height, splitY);
+        
+        if (config.sun.reflection) {
+          drawReflection(ctx, config.sun, width, height, splitY);
+        }
       }
     } else {
       const splitX = Math.floor((config.splitPos / 100) * width);
