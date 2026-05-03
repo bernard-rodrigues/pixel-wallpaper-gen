@@ -144,8 +144,7 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     const sunRadius = (sun.radius / 100) * Math.min(canvasW, canvasH);
     
     const baseHSL = hexToHSL(sun.baseColor);
-    let seed = sun.seed;
-
+    
     // Bounding box for reflection (mirrored across splitY)
     const reflectionCenterY = splitY + (splitY - sunY);
     const startX = Math.floor((sunX - sunRadius) / pixelSize);
