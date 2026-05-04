@@ -76,7 +76,7 @@ const THEMES = [
 const getRandomTheme = () => THEMES[Math.floor(Math.random() * THEMES.length)];
 
 const initialArea = (color: string): AreaConfig => ({
-  mode: 'RANDOM', // Default to pixelated
+  mode: ['RANDOM', 'GRADIENT'][Math.floor(Math.random() * 2)] as Mode, // Default to pixelated
   baseColor: color,
   density: 40,
   hueRange: 15,
@@ -112,7 +112,7 @@ export const useWallpaper = () => {
         reflection: true,
         x: Math.floor(20 + Math.random() * 60),
         y: Math.floor(sunY),
-        radius: Math.floor(10 + Math.random() * 10),
+        radius: Math.floor(10 + Math.random() * 40),
       },
     };
   });
@@ -135,13 +135,5 @@ export const useWallpaper = () => {
     }));
   };
 
-  const getCanvasSize = () => {
-    const spec = DEVICE_SPECS[config.device];
-    if (config.orientation === spec.native) {
-      return { width: spec.width, height: spec.height };
-    }
-    return { width: spec.height, height: spec.width };
-  };
-
-  return { config, updateGlobal, updateSide, regenerateSide, getCanvasSize };
+  return { config, updateGlobal, updateSide, regenerateSide };
 };

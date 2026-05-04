@@ -42,14 +42,11 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
 
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          let t = 0;
-          if (area.gradientDirection === 'HORIZONTAL') {
-            t = c / cols;
-          } else if (area.gradientDirection === 'VERTICAL') {
-            t = r / rows;
-          } else {
-            t = (c / cols + r / rows) / 2;
-          }
+          const t = area.gradientDirection === 'HORIZONTAL'
+            ? c / cols
+            : area.gradientDirection === 'VERTICAL'
+              ? r / rows
+              : (c / cols + r / rows) / 2;
 
           const scaledT = t * (gradientColors.length - 1);
           const index = Math.floor(scaledT);
@@ -119,16 +116,17 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
           if (sun.mode === 'RANDOM') {
             color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, sunRng);
           } else {
-            let t = 0;
             const relX = (px - (sunX - sunRadius)) / (sunRadius * 2);
             const relY = (py - (sunY - sunRadius)) / (sunRadius * 2);
             
-            if (sun.gradientDirection === 'HORIZONTAL') t = relX;
-            else if (sun.gradientDirection === 'VERTICAL') t = relY;
-            else t = (relX + relY) / 2;
+            const t = sun.gradientDirection === 'HORIZONTAL' 
+              ? relX 
+              : sun.gradientDirection === 'VERTICAL' 
+                ? relY 
+                : (relX + relY) / 2;
             
-            t = Math.max(0, Math.min(1, t));
-            const scaledT = t * (gradientColors.length - 1);
+            const clampedT = Math.max(0, Math.min(1, t));
+            const scaledT = clampedT * (gradientColors.length - 1);
             const index = Math.floor(scaledT);
             const nextIndex = Math.min(index + 1, gradientColors.length - 1);
             const localT = scaledT - index;
@@ -203,15 +201,17 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
           if (sun.mode === 'RANDOM') {
             color = getRandomizedHSL(baseHSL, sun.hueRange, sun.satRange, sun.lightRange, refRng);
           } else {
-            let t = 0;
             const relX = (px - (sunX - sunRadius)) / (sunRadius * 2);
             const relY = (dy + sunRadius) / (sunRadius * 2);
-            if (sun.gradientDirection === 'HORIZONTAL') t = relX;
-            else if (sun.gradientDirection === 'VERTICAL') t = relY;
-            else t = (relX + relY) / 2;
             
-            t = Math.max(0, Math.min(1, t));
-            const scaledT = t * (gradientColors.length - 1);
+            const t = sun.gradientDirection === 'HORIZONTAL' 
+              ? relX 
+              : sun.gradientDirection === 'VERTICAL' 
+                ? relY 
+                : (relX + relY) / 2;
+            
+            const clampedT = Math.max(0, Math.min(1, t));
+            const scaledT = clampedT * (gradientColors.length - 1);
             const index = Math.floor(scaledT);
             const nextIndex = Math.min(index + 1, gradientColors.length - 1);
             const localT = scaledT - index;
