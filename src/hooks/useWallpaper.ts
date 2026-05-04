@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export type Device = 'S23' | 'TAB_S10_FE';
+export type Device = 'S23' | 'TAB_S10_FE' | 'CUSTOM';
 export type Orientation = 'PORTRAIT' | 'LANDSCAPE';
 export type Mode = 'RANDOM' | 'GRADIENT';
 export type GradientDirection = 'HORIZONTAL' | 'VERTICAL' | 'DIAGONAL';
@@ -29,6 +29,8 @@ export interface SunConfig extends AreaConfig {
 
 export interface WallpaperConfig {
   device: Device;
+  customWidth: number;
+  customHeight: number;
   orientation: Orientation;
   splitAxis: SplitAxis;
   splitPos: number;
@@ -100,6 +102,8 @@ export const useWallpaper = () => {
     
     return {
       device: 'S23',
+      customWidth: 1920,
+      customHeight: 1080,
       orientation: 'PORTRAIT',
       splitAxis: 'HORIZONTAL',
       splitPos: splitPos,

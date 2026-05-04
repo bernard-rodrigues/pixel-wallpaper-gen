@@ -158,7 +158,50 @@ const Controls: React.FC<ControlsProps> = ({ config, updateGlobal, updateSide, r
             <select value={config.device} onChange={(e) => updateGlobal({ device: e.target.value as Device })}>
               <option value="S23">Galaxy S23</option>
               <option value="TAB_S10_FE">Galaxy Tab S10 FE+</option>
+              <option value="CUSTOM">Custom</option>
             </select>
+            
+            {config.device === 'CUSTOM' && (
+              <>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontSize: '0.65rem', color: 'var(--label-color)', fontWeight: 700 }}>Width</span>
+                  <input 
+                    type="number" 
+                    value={config.customWidth} 
+                    onChange={(e) => updateGlobal({ customWidth: parseInt(e.target.value) || 0 })}
+                    style={{ 
+                      width: '100%', 
+                      padding: '10px', 
+                      borderRadius: '8px', 
+                      border: '1px solid var(--border-color)', 
+                      backgroundColor: 'var(--input-bg)', 
+                      color: 'var(--text-color)',
+                      fontSize: '0.8rem',
+                      fontWeight: 600
+                    }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontSize: '0.65rem', color: 'var(--label-color)', fontWeight: 700 }}>Height</span>
+                  <input 
+                    type="number" 
+                    value={config.customHeight} 
+                    onChange={(e) => updateGlobal({ customHeight: parseInt(e.target.value) || 0 })}
+                    style={{ 
+                      width: '100%', 
+                      padding: '10px', 
+                      borderRadius: '8px', 
+                      border: '1px solid var(--border-color)', 
+                      backgroundColor: 'var(--input-bg)', 
+                      color: 'var(--text-color)',
+                      fontSize: '0.8rem',
+                      fontWeight: 600
+                    }}
+                  />
+                </div>
+              </>
+            )}
+
             <div className="toggle-group">
               <button className={config.orientation === 'PORTRAIT' ? 'active' : ''} onClick={() => updateGlobal({ orientation: 'PORTRAIT' })}>Portrait</button>
               <button className={config.orientation === 'LANDSCAPE' ? 'active' : ''} onClick={() => updateGlobal({ orientation: 'LANDSCAPE' })}>Landscape</button>

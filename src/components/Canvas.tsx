@@ -233,7 +233,11 @@ const Canvas: React.FC<CanvasProps> = ({ config }) => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const spec = DEVICE_SPECS[config.device];
+    const isCustom = config.device === 'CUSTOM';
+    const spec = isCustom 
+      ? { width: config.customWidth, height: config.customHeight, native: 'LANDSCAPE' as const }
+      : DEVICE_SPECS[config.device as keyof typeof DEVICE_SPECS];
+    
     let width, height;
     if (config.orientation === spec.native) {
       width = spec.width;
